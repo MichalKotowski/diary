@@ -1,0 +1,11 @@
+.messagesContainer {
+	margin-top: 20px;
+	display: block;
+	min-height: 20px;
+	margin-bottom: 20px;
+	padding: 16.5px 14px;
+
+	.message:not(:first-child) {
+		margin-top: 10px;
+	}
+}
