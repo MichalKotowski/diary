@@ -1,13 +1,13 @@
 import Box from '@mui/material/Box'
-import styles from './chatHistory.module.scss'
+import styles from './ConversationLog.module.scss'
 import Paper from '@mui/material/Paper'
 import { Message } from '@/app/types/global'
 
-type ChatHistoryProps = {
+type ConversationLogProps = {
 	messages: Message[]
 }
 
-const ChatHistory = ({ messages }: ChatHistoryProps) => {
+const ConversationLog = ({ messages }: ConversationLogProps) => {
 	return (
 		<Paper variant="outlined" className={styles.messagesContainer}>
 			<Box>
@@ -25,4 +25,4 @@ const ChatHistory = ({ messages }: ChatHistoryProps) => {
 	)
 }
 
-export default ChatHistory
+export default ConversationLog

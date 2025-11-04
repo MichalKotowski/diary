@@ -5,6 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import theme from '../theme/theme'
 import { Roboto } from 'next/font/google'
 import './globals.css'
+import Navigation from './components/Navigation/Navigation'
+import Grid from '@mui/material/Grid'
 
 const roboto = Roboto({
 	weight: ['300', '400', '500', '700'],
@@ -29,7 +31,12 @@ export default function RootLayout({
 				<AppRouterCacheProvider>
 					<ThemeProvider theme={theme}>
 						<CssBaseline />
-						{children}
+						<Grid container spacing={2}>
+							<Grid size={4}>
+								<Navigation />
+							</Grid>
+							<Grid size={8}>{children}</Grid>
+						</Grid>
 					</ThemeProvider>
 				</AppRouterCacheProvider>
 			</body>

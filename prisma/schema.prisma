@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
@@ -11,7 +11,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Chat {
+model Conversation {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   title     String
@@ -23,6 +23,6 @@ model Message {
   createdAt DateTime @default(now())
   role      String
   content   String
-  chatId    Int
-  chat      Chat     @relation(fields: [chatId], references: [id])
+  conversationId    Int
+  conversation      Conversation     @relation(fields: [conversationId], references: [id])
 }

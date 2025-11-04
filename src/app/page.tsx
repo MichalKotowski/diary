@@ -1,9 +1,10 @@
 'use client'
+
 import { useState } from 'react'
 import Container from '@mui/material/Container'
-import Chat from './components/Chat/Chat'
+import Conversation from './components/Conversation/Conversation'
 import { Message } from './types/global'
-import ChatHistory from './components/ChatHistory/ChatHistory'
+import ConversationLog from './components/ConversationLog/ConversationLog'
 
 const Home = () => {
 	const [messages, setMessages] = useState<Message[]>([])
@@ -11,8 +12,8 @@ const Home = () => {
 	return (
 		<main>
 			<Container maxWidth="sm">
-				<ChatHistory messages={messages} />
-				<Chat messages={messages} setMessages={setMessages} />
+				<ConversationLog messages={messages} />
+				<Conversation />
 			</Container>
 		</main>
 	)
