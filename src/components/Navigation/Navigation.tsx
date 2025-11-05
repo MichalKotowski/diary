@@ -1,12 +1,11 @@
 'use client'
 
-import { ConversationModel } from '@/app/types/global'
+import { ConversationModel } from '@/types'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styles from './Navigation.module.scss'
 
 const Navigation = () => {
-	// fix conversations on updating on new conversation creation
 	const [conversations, setConversations] = useState<ConversationModel[]>([])
 
 	useEffect(() => {

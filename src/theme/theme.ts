@@ -1,5 +1,6 @@
-'use client';
-import { createTheme } from '@mui/material/styles';
+'use client'
+
+import { createTheme } from '@mui/material/styles'
 
 const theme = createTheme({
   typography: {
@@ -8,6 +9,6 @@ const theme = createTheme({
   palette: {
     mode: 'dark',
   }
-});
+})
 
-export default theme;
+export default theme

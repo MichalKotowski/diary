@@ -1,8 +1,10 @@
 export const dynamic = 'force-dynamic' // <- ensures runtime rendering, no ISR caching
 export const revalidate = 0
 
-import prisma from '@/lib/prisma'
+import { prisma } from '@/lib'
+import Container from '@mui/material/Container'
 import { notFound } from 'next/navigation'
+import { Chat } from '@/components'
 
 const Page = async ({ params }: { params: Promise<{ id: number }> }) => {
 	const { id } = await params
@@ -12,16 +14,12 @@ const Page = async ({ params }: { params: Promise<{ id: number }> }) => {
 		include: { messages: true },
 	})
 
-	console.log(entry)
-
 	if (!entry) return notFound()
 
 	return (
-		<div>
-			{entry.messages.map((message) => (
-				<li key={message.id}>{message.content}</li>
-			))}
-		</div>
+		<Container maxWidth="sm">
+			<Chat messages={entry.messages} conversationId={Number(id)} />
+		</Container>
 	)
 }
 

@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib"
 
 export async function createMessage({
   conversationId,

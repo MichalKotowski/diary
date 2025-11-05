@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma"
+import { prisma } from "@/lib"
 
 export async function createConversation(title: string) {
   return prisma.conversation.create({

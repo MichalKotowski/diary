@@ -1,11 +1,12 @@
-import prisma from "../../../../../lib/prisma"
+import { prisma } from "@/lib"
 import { NextResponse } from "next/server"
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const messages = await prisma.message.findMany({
     where: { conversationId: Number(params.id) },
     orderBy: { createdAt: "asc" },
-  });
+  })
+
   return NextResponse.json(messages)
 }
 
@@ -17,6 +18,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       role,
       content,
     },
-  });
+  })
+
   return NextResponse.json(message)
 }

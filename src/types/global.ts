@@ -1,6 +1,9 @@
 export type Message = {
-	role: 'user' | 'assistant'
+	// Temporarily set role to string to match prisma schema
+	role: 'user' | 'assistant' | string
 	content: string
+	id?: number
+	pending?: boolean
 }
 
 export type ConversationModel = {
