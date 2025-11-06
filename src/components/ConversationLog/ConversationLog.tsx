@@ -1,7 +1,5 @@
 'use client'
 
-import Box from '@mui/material/Box'
-import Paper from '@mui/material/Paper'
 import { Message } from '@/types'
 import styles from './ConversationLog.module.scss'
 import { useEffect, useState } from 'react'
@@ -26,20 +24,16 @@ const Dots = () => {
 
 const ConversationLog = ({ messages }: ConversationLogProps) => {
 	return (
-		<Paper variant="outlined" className={styles.messagesContainer}>
-			<Box>
-				{messages.map((message, index) => (
-					<Box
-						key={index}
-						className={`${styles.message}
-									${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}
-					>
+		<div className={styles.messagesContainer}>
+			{messages.map((message, index) => (
+				<div key={index} className={styles.message}>
+					<p>
 						<strong>{message.role === 'user' ? 'You' : 'AI'}:</strong>{' '}
-						{message.pending ? <Dots /> : message.content}
-					</Box>
-				))}
-			</Box>
-		</Paper>
+						<span>{message.pending ? <Dots /> : message.content}</span>
+					</p>
+				</div>
+			))}
+		</div>
 	)
 }
 

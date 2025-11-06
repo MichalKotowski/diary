@@ -1,11 +1,27 @@
 .messagesContainer {
-	margin-top: 20px;
 	display: block;
-	min-height: 20px;
+	min-height: 60px;
 	margin-bottom: 20px;
-	padding: 16.5px 14px;
+	background-color: var(--gray800);
+	border: 1px solid var(--gray500);
+	border-radius: 8px;
+	padding: 40px;
 
-	.message:not(:first-child) {
-		margin-top: 10px;
+	.message {
+		color: white;
+		font-size: 16px;
+		line-height: 1.6;
+
+		strong {
+			color: white;
+		}
+
+		span {
+			color: var(--gray200);
+		}
+
+		&:not(:first-child) {
+			margin-top: 20px;
+		}
 	}
 }

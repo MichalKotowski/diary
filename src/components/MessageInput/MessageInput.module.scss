@@ -1,5 +1,53 @@
 .buttonContainer {
 	display: flex;
 	justify-content: flex-end;
-	margin-top: 20px;
+	margin-top: 10px;
+}
+
+// Temporary solution
+.textarea {
+	width: 100%;
+	padding: 20px 40px;
+	min-height: 66px;
+	height: 66px;
+	border: 1px solid var(--gray500);
+	border-radius: 8px;
+	resize: vertical;
+	font-size: 16px;
+	line-height: 1.6;
+	font-family: inherit;
+	background-color: var(--gray900);
+	color: var(--gray100);
+	border-radius: 8px;
+	overflow-y: hidden;
+
+	&::placeholder {
+		color: var(--gray500);
+	}
+
+	&:focus {
+		outline: none;
+		border-color: var(--gray200);
+		box-shadow: 0 0 0 2px var(--blue200);
+	}
+}
+
+// Temporary solution
+.button {
+	background-color: var(--gray500);
+	color: var(--gray100);
+	color: white;
+	border: none;
+	padding: 8px 24px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 16px;
+	line-height: 1.6;
+	transition: 0.2s;
+
+	&:disabled {
+		background-color: var(--gray700);
+		color: var(--gray300);
+		cursor: not-allowed;
+	}
 }

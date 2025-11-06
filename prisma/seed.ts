@@ -1,8 +1,8 @@
-import { PrismaClient, Prisma } from "../src/generated/prisma/client";
+import { PrismaClient } from "@/generated/prisma/client"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
-const conversationData: Prisma.ConversationModel[] = [
+const conversationData = [
   {
     title: "Test #1",
     id: 1,
@@ -13,12 +13,12 @@ const conversationData: Prisma.ConversationModel[] = [
     id: 2,
     createdAt: new Date(),
   },
-];
+]
 
 export async function main() {
   for (const u of conversationData) {
-    await prisma.conversation.create({ data: u });
+    await prisma.conversation.create({ data: u })
   }
 }
 
-main();
+main()

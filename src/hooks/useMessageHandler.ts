@@ -1,20 +1,23 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
+import useSWR from 'swr'
 
 export const useMessageHandler = (initialConversationId?: number) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
+  const { mutate } = useSWR('/api/conversations') // shared cache key
 
   const createConversation = async (): Promise<number | undefined> => {
     const res = await fetch('/api/conversations', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ title: 'New Conversation' }),
     })
 
     if (!res.ok) return
+
     const { id } = await res.json()
+    mutate() // refresh conversation list
     return id
   }
 
@@ -31,14 +34,19 @@ export const useMessageHandler = (initialConversationId?: number) => {
   const sendMessage = async (message: string) => {
     setLoading(true)
 
-    let id = initialConversationId
-    if (!id && pathname === '/') {
-      id = await createConversation()
-      if (!id) return setLoading(false)
-    }
+    try {
+      let id = initialConversationId
 
-    await createMessage(id!, message.trim())
-    setLoading(false)
+      // Only create new conversation if user is at root
+      if (!id && pathname === '/') {
+        id = await createConversation()
+        if (!id) return
+      }
+
+      await createMessage(id!, message.trim())
+    } finally {
+      setLoading(false)
+    }
   }
 
   return { sendMessage, loading }

@@ -1,9 +1,6 @@
 'use client'
 
 import { ChangeEvent, FormEvent, useState } from 'react'
-import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import { Message } from '@/types'
 import { useMessageHandler } from '@/hooks'
 import styles from './MessageInput.module.scss'
@@ -33,27 +30,45 @@ const MessageInput = ({ conversationId, setMessages }: MessageInputProps) => {
 		await sendMessage(message)
 	}
 
+	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+		setInput(event.target.value)
+	}
+
+	const handleKeyDown = (event: React.KeyboardEvent) => {
+		if (event.key === 'Enter' && !event.shiftKey) {
+			event.preventDefault()
+			handleSubmit(event)
+		}
+	}
+
+	// Write custom ui components for form, textarea and button
+
 	return (
-		<Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit}>
-			<TextField
+		<form
+			className={styles.form}
+			onSubmit={handleSubmit}
+			autoComplete="off"
+			noValidate
+		>
+			<textarea
 				id="text-area"
-				label="Prompt"
-				multiline
-				rows={4}
 				placeholder="Ask something..."
-				fullWidth
-				onChange={(e: ChangeEvent<HTMLInputElement>) =>
-					setInput(e?.target?.value)
-				}
+				rows={4}
 				value={input}
-				onKeyDown={(e) => e.key === 'Enter' && handleSubmit(e)}
+				onChange={handleChange}
+				onKeyDown={handleKeyDown}
+				className={styles.textarea}
 			/>
-			<Box className={styles.buttonContainer}>
-				<Button variant="contained" loading={loading} type="submit">
+			<div className={styles.buttonContainer}>
+				<button
+					type="submit"
+					disabled={loading || !input.trim()}
+					className={styles.button}
+				>
 					Send
-				</Button>
-			</Box>
-		</Box>
+				</button>
+			</div>
+		</form>
 	)
 }
 

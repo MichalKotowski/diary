@@ -5,8 +5,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { theme } from '@/theme'
 import { Roboto } from 'next/font/google'
 import { Navigation } from '@/components'
-import Grid from '@mui/material/Grid'
-
+import { SWRProvider } from '@/app/providers'
+import styles from './layout.module.scss'
 import './globals.css'
 
 const roboto = Roboto({
@@ -29,17 +29,17 @@ export default function RootLayout({
 	return (
 		<html lang="en" className={roboto.variable}>
 			<body>
-				<AppRouterCacheProvider>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						<Grid container spacing={2}>
-							<Grid size={4}>
+				<SWRProvider>
+					<AppRouterCacheProvider>
+						<ThemeProvider theme={theme}>
+							<CssBaseline />
+							<div className={styles.container}>
 								<Navigation />
-							</Grid>
-							<Grid size={8}>{children}</Grid>
-						</Grid>
-					</ThemeProvider>
-				</AppRouterCacheProvider>
+								<div className={styles.content}>{children}</div>
+							</div>
+						</ThemeProvider>
+					</AppRouterCacheProvider>
+				</SWRProvider>
 			</body>
 		</html>
 	)

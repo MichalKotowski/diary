@@ -16,11 +16,7 @@ const Page = async ({ params }: { params: Promise<{ id: number }> }) => {
 
 	if (!entry) return notFound()
 
-	return (
-		<Container maxWidth="sm">
-			<Chat messages={entry.messages} conversationId={Number(id)} />
-		</Container>
-	)
+	return <Chat messages={entry.messages} conversationId={Number(id)} />
 }
 
 export default Page
