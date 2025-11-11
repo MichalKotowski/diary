@@ -22,7 +22,7 @@ export const useMessageHandler = (initialConversationId?: number) => {
   }
 
   const createMessage = async (conversationId: number, message: string) => {
-    const res = await fetch('/api/message', {
+    const res = await fetch(`/api/conversations/${conversationId}/messages`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message, conversationId }),

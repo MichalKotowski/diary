@@ -2,7 +2,6 @@ export const dynamic = 'force-dynamic' // <- ensures runtime rendering, no ISR c
 export const revalidate = 0
 
 import { prisma } from '@/lib'
-import Container from '@mui/material/Container'
 import { notFound } from 'next/navigation'
 import { Chat } from '@/components'
 

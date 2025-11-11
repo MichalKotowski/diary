@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ConversationLog } from '@/components'
+import { ConversationLog, ConversationSummary } from '@/components'
 import { MessageInput } from '@/components'
 import { Message } from '@/types'
 import styles from './Chat.module.scss'
@@ -20,8 +20,10 @@ const Chat = ({ messages = [], conversationId }: ChatProps) => {
 
 	return (
 		<>
+			<ConversationSummary />
 			<ConversationLog messages={messagesState} />
 			<MessageInput
+				messages={messagesState}
 				setMessages={setMessagesState}
 				conversationId={conversationId}
 			/>

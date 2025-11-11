@@ -26,4 +26,18 @@
 			border: 1px solid var(--gray400);
 		}
 	}
+
+	.navigationGroup {
+		.groupHeader {
+		}
+
+		.groupItems {
+			display: flex;
+			flex-direction: column;
+
+			& > * {
+				margin-left: 20px;
+			}
+		}
+	}
 }
