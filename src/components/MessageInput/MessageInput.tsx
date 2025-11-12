@@ -1,41 +1,25 @@
 'use client'
 
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { Message } from '@/types'
-import { useMessageHandler, useSummarizeHandler } from '@/hooks'
 import styles from './MessageInput.module.scss'
 
 type MessageInputProps = {
-	conversationId?: number
-	messages: Message[]
-	setMessages: (updater: (prev: Message[]) => Message[]) => void
+	messages?: Message[]
+	sendMessage: (message: string) => Promise<void>
+	summarize: () => Promise<void>
+	isLoading: boolean
+	isLocked?: boolean
 }
 
 const MessageInput = ({
-	conversationId,
 	messages,
-	setMessages,
+	sendMessage,
+	summarize,
+	isLoading,
+	isLocked,
 }: MessageInputProps) => {
 	const [input, setInput] = useState('')
-	const [isConversationLocked, setIsConversationLocked] = useState(false)
-	const { sendMessage, loading } = useMessageHandler(conversationId)
-	const {
-		summarize,
-		hasSummary,
-		loading: summarizing,
-	} = useSummarizeHandler(conversationId)
-
-	const isLoading = loading || summarizing
-
-	useEffect(() => {
-		const checkIfConversationIsLocked = async () => {
-			if (!conversationId) return
-			const isLocked = await hasSummary()
-			setIsConversationLocked(isLocked)
-		}
-
-		checkIfConversationIsLocked()
-	}, [conversationId, hasSummary])
 
 	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault()
@@ -44,18 +28,8 @@ const MessageInput = ({
 		if (!message) return
 
 		setInput('')
-		setMessages((prev) => [
-			...prev,
-			{ role: 'user', content: message },
-			{ role: 'assistant', content: '...', pending: true },
-		])
 
 		await sendMessage(message)
-	}
-
-	const handleSummarize = async () => {
-		await summarize()
-		setIsConversationLocked(true)
 	}
 
 	const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -85,20 +59,20 @@ const MessageInput = ({
 				onChange={handleChange}
 				onKeyDown={handleKeyDown}
 				className={styles.textarea}
-				disabled={isConversationLocked}
+				disabled={isLocked}
 			/>
 			<div className={styles.buttonContainer}>
 				<button
 					type="button"
-					disabled={isLoading || !!!messages.length || isConversationLocked}
+					disabled={isLoading || !messages?.length || isLocked}
 					className={styles.button}
-					onClick={handleSummarize}
+					onClick={summarize}
 				>
 					Summarize
 				</button>
 				<button
 					type="submit"
-					disabled={isLoading || !input.trim() || isConversationLocked}
+					disabled={isLoading || !input.trim() || isLocked}
 					className={styles.button}
 				>
 					Send

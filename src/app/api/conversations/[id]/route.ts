@@ -4,15 +4,34 @@ import { prisma } from "@/lib"
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const conversationId = Number(id)
+
   if (isNaN(conversationId)) {
     return NextResponse.json({ error: "Invalid conversation ID" }, { status: 400 })
   }
+
   try {
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
       include: {
-        summary: true,
-        tags: true,
+        messages: {
+          orderBy: { createdAt: "asc" },
+          select: {
+            id: true,
+            role: true,
+            content: true,
+            createdAt: true,
+          },
+        },
+        summary: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+          },
+        },
+        tags: {
+          select: { name: true },
+        },
       },
     })
 
@@ -22,6 +41,10 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 
     return NextResponse.json({
       id: conversation.id,
+      title: conversation.title,
+      createdAt: conversation.createdAt,
+      locked: conversation.locked,
+      messages: conversation.messages,
       summary: conversation.summary,
       tags: conversation.tags.map((t) => t.name),
     })

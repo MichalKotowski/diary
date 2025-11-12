@@ -1,15 +1,27 @@
 export type Message = {
-	// Temporarily set role to string to match prisma schema
-	role: 'user' | 'assistant' | string
-	content: string
 	id?: number
-	pending?: boolean
+	role: string
+	content: string
+	createdAt?: string // ISO string from JSON
 }
 
-export type ConversationModel = {
-	id: string
+export type Summary = {
+	id: number
+	content: string
+	createdAt: string
+} | null
+
+export type Conversation = {
+	id: number
 	title: string
-	createdAt: Date
-	messages?: Message[]
+	createdAt: string
+	locked: boolean
+	messages: Message[]
+	summary: Summary
+	tags: string[]
 }
 
+export type LLMMessage = {
+	role: string
+	content: string
+}

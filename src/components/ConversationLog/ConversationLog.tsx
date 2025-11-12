@@ -5,7 +5,9 @@ import styles from './ConversationLog.module.scss'
 import { useEffect, useState } from 'react'
 
 type ConversationLogProps = {
-	messages: Message[]
+	messages?: Message[]
+	isLoading?: boolean
+	isLocked?: boolean
 }
 
 const Dots = () => {
@@ -22,17 +24,33 @@ const Dots = () => {
 	return <>{dots}</>
 }
 
-const ConversationLog = ({ messages }: ConversationLogProps) => {
+const ConversationLog = ({
+	messages,
+	isLoading,
+	isLocked,
+}: ConversationLogProps) => {
 	return (
 		<div className={styles.messagesContainer}>
-			{messages.map((message, index) => (
+			{messages?.map((message, index) => (
 				<div key={index} className={styles.message}>
 					<p>
 						<strong>{message.role === 'user' ? 'You' : 'AI'}:</strong>{' '}
-						<span>{message.pending ? <Dots /> : message.content}</span>
+						<span>{message.content}</span>
 					</p>
 				</div>
 			))}
+			{messages?.length && isLoading ? (
+				<div className={styles.message}>
+					<p>
+						<strong>AI:</strong> <Dots />
+					</p>
+				</div>
+			) : null}
+			{isLocked && (
+				<div className={styles.message}>
+					<p>Conversation has ended</p>
+				</div>
+			)}
 		</div>
 	)
 }

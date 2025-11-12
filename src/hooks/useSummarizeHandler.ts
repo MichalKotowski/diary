@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
-export function useSummarizeHandler(conversationId?: number) {
+type useSummarizeHandlerProps = {
+  conversationId?: number,
+  refresh?: () => void,
+}
+
+export function useSummarizeHandler({conversationId, refresh}: useSummarizeHandlerProps) {
   const [loading, setLoading] = useState(false)
 
   const summarize = async (): Promise<void> => {
@@ -14,7 +19,7 @@ export function useSummarizeHandler(conversationId?: number) {
         body: JSON.stringify({ conversationId })
       })
 
-      if (!res.ok) return
+      if (res.ok && refresh) refresh()
     } catch (err) {
       console.error(err)
     } finally {
@@ -22,41 +27,5 @@ export function useSummarizeHandler(conversationId?: number) {
     }
   }
 
-  const hasSummary = async (): Promise<boolean> => {
-    if (!conversationId) return false
-
-    try {
-      const res = await fetch(`/api/conversations/${conversationId}`, {
-        method: 'GET',
-      })
-
-      if (!res.ok) return false
-
-      const data = await res.json()
-      return !!data.summary
-    } catch (err) {
-      console.error(err)
-      return false
-    }
-  }
-
-  const getSummary = async (): Promise<string> => {
-    if (!conversationId) return ''
-
-    try {
-      const res = await fetch(`/api/conversations/${conversationId}`, {
-        method: 'GET',
-      })
-
-      if (!res.ok) return ''
-
-      const data = await res.json()
-      return data.summary?.content ?? ''
-    } catch (err) {
-      console.error(err)
-      return ''
-    }
-  }
-
-  return { summarize, hasSummary, getSummary, loading }
+  return { summarize, loading }
 }

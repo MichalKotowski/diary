@@ -1,6 +1,6 @@
 'use client'
 
-import { ConversationModel } from '@/types'
+import { Conversation } from '@/types'
 import Link from 'next/link'
 import styles from './Navigation.module.scss'
 import useSWR from 'swr'
@@ -8,8 +8,11 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 const Navigation = () => {
-	const { data: conversations } =
-		useSWR<ConversationModel[]>('/api/conversations')
+	const { data: conversations } = useSWR<Conversation[]>('/api/conversations', {
+		revalidateOnFocus: false,
+		revalidateOnReconnect: false,
+		revalidateIfStale: false,
+	})
 	const pathname = usePathname()
 	const [openDate, setOpenDate] = useState<string | null>(null)
 
@@ -19,7 +22,7 @@ const Navigation = () => {
 		if (!acc[dateKey]) acc[dateKey] = []
 		acc[dateKey].push(conv)
 		return acc
-	}, {} as Record<string, ConversationModel[]>)
+	}, {} as Record<string, Conversation[]>)
 
 	// --- Sort dates descending ---
 	const sortedDates = Object.keys(grouped).sort((a, b) => (a < b ? 1 : -1))

@@ -1,36 +1,15 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useSummarizeHandler } from '@/hooks'
+import styles from './ConversationSummary.module.scss'
 
 type ConversationSummaryProps = {
-	conversationId?: number
+	summary?: string
 }
 
-const ConversationSummary = ({ conversationId }: ConversationSummaryProps) => {
-	const [summary, setSummary] = useState('')
-	const { getSummary, hasSummary } = useSummarizeHandler(conversationId)
+const ConversationSummary = ({ summary }: ConversationSummaryProps) => {
+	if (!summary) return
 
-	// On mount, check if conversation has a summary
-	useEffect(() => {
-		if (!conversationId) return
-
-		const fetchSummaryStatus = async () => {
-			const isLocked = await hasSummary()
-
-			if (isLocked) {
-				const text = await getSummary()
-				setSummary(text)
-			}
-		}
-
-		fetchSummaryStatus()
-	}, [conversationId, hasSummary, getSummary])
-
-	if (!conversationId) return null
-
+	// Temporary visibility
 	return (
-		<div>
+		<div className={styles.summaryWrapper}>
 			<h3>Summary</h3>
 			<p>{summary}</p>
 		</div>

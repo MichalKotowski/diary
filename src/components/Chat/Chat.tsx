@@ -1,32 +1,60 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ConversationLog, ConversationSummary } from '@/components'
 import { MessageInput } from '@/components'
+import {
+	useConversation,
+	useMessageHandler,
+	useSummarizeHandler,
+} from '@/hooks'
+import { useEffect, useState } from 'react'
 import { Message } from '@/types'
+import { getLastChatState } from '@/stores'
 import styles from './Chat.module.scss'
 
 type ChatProps = {
-	messages?: Message[]
 	conversationId?: number
 }
 
-const Chat = ({ messages = [], conversationId }: ChatProps) => {
-	const [messagesState, setMessagesState] = useState<Message[]>(messages)
+const Chat = ({ conversationId }: ChatProps) => {
+	const { messages, summary, locked, refresh } = useConversation(conversationId)
+	const [messagesState, setMessagesState] = useState<Message[]>(() =>
+		getLastChatState(conversationId)
+	)
+	const { summarize, loading: summarizing } = useSummarizeHandler({
+		conversationId,
+		refresh,
+	})
+	const { sendMessage, loading: sending } = useMessageHandler({
+		initialConversationId: conversationId,
+		refresh,
+		setMessages: setMessagesState,
+	})
 
+	// Sync with SWR whenever conversation updates (after refresh)
 	useEffect(() => {
-		setMessagesState(messages)
+		const updateMessages = () => {
+			if (messages) setMessagesState(messages)
+		}
+
+		updateMessages()
 	}, [messages])
 
 	return (
 		<>
-			<ConversationSummary />
-			<ConversationLog messages={messagesState} />
+			<ConversationLog
+				messages={messagesState}
+				isLoading={sending}
+				isLocked={locked}
+			/>
 			<MessageInput
 				messages={messagesState}
-				setMessages={setMessagesState}
-				conversationId={conversationId}
+				sendMessage={sendMessage}
+				summarize={summarize}
+				isLoading={sending || summarizing}
+				isLocked={locked}
 			/>
+			<ConversationSummary summary={summary} />
 		</>
 	)
 }
